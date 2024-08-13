@@ -1,0 +1,100 @@
+<!--
+
+    platformRenderingMaterial = new THREE.ShaderMaterial({
+                uniforms: {
+                    textureMap: { type: 't', value: THREE.ImageUtils.loadTexture('matcap1.jpg') },
+                    normalMap: { type: 't', value: null },
+                    normalScale: { type: 'f', value: 1 },
+                    texScale: { type: 'f', value: 5 },
+                    useSSS: { type: 'f', value: 1 },
+                    useScreen: { type: 'f', value: 0 },
+                    color: { type: 'c', value: new THREE.Color(18. / 255., 72. / 255., 85. / 255.) }
+                },
+                vertexShader: document.getElementById('vertexShader').textContent,
+                fragmentShader: document.getElementById('fragmentShader').textContent,
+                side: THREE.FrontSide
+            });
+-->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Graph Visualization</title>
+    <script src="Graph.js"></script>
+    <script src="webgl-frameworks/three.min.js"></script>
+    <script src="utils/Stats.js"></script>
+    <script src="utils/TrackballControls.js"></script>
+    <script src="utils/Label.js"></script>
+    <script src="utils/ObjectSelection.js"></script>
+    <script src="drawings/mindorb.js"></script>
+    <script src="fonts/helvetiker_bold.typeface.js"></script>
+    <script src="fonts/helvetiker_regular.typeface.js"></script>
+    <script src="shaders/BillBoardShader.js"></script>
+    <script type="text/javascript">
+        var drawing;
+        function createDrawing() {
+            var nodeMaterial = new THREE.ShaderMaterial({
+                uniforms: THREE.BillBoardShader.uniforms,
+                vertexShader: THREE.BillBoardShader.vertexShader,
+                fragmentShader: THREE.BillBoardShader.fragmentShader
+            });
+            drawing = new Drawing.Minorb({ selection: true, showStats: true, showInfo: true, nodeMaterial: nodeMaterial });
+        }
+    </script>
+
+    <style type="text/css">
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+            font: 11px courier;
+            overflow: hidden;
+        }
+
+        #graph-info {
+            position: absolute;
+            top: 0px;
+            left: 40%;
+            margin: 10px;
+            background-color: #ffffe0;
+            color: #333;
+            padding: 5px 10px;
+        }
+
+        #options {
+            position: absolute;
+            top: 0;
+            right: 0;
+            z-index: 10;
+        }
+
+        #TextEntry {
+            display: block;
+            position: absolute;
+            top: -50000px;
+            left: -500000px;
+        }
+    </style>
+</head>
+<body onload="createDrawing()">
+    <div id="options">
+        <form>
+            <p>
+                <select onchange="drawing.changeMode(this)">
+                    <option value="graph" onchange="drawing.changeMode('ss')">Graphing mode</option>
+                    <option value="text" onselect="">Text Mode</option>
+                </select>
+            </p>
+        </form>
+    </div>
+    <input type="text" id="TextEntry" />
+    <div style="position: absolute; bottom: 0;">
+
+        Rotate: Mouse button or Press Key R + mouse Move <br />
+        Zoom: Z or Mouse Wheel<br />
+        Drag: Press Key D + mouse Move<br />
+        Scale a hull : press Key Shift + mouse click + mouse move
+        Enter text: Switch to text mode, click on box, type something
+    </div>
+
+</body>
+</html>
